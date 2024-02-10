@@ -4,6 +4,9 @@ from functools import partial
 from datetime import datetime
 import time
 from threading import Thread, Lock
+import wled
+import webbrowser
+import threading
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,7 +25,8 @@ palette = Category10[10]
 
 def data_capture(start_time, args, ip_list, params):
     for ip in ip_list:
-        data_source[str(ip)] = {'x': [], 'y': []}
+        name = wled.get_name(ip)
+        data_source[str(ip)] = {"name":name, 'x': [], 'y': []}
 
     while True:
         time.sleep(args.period)  # Simulate data capture every 500ms
@@ -30,9 +34,15 @@ def data_capture(start_time, args, ip_list, params):
 
         with data_lock:
             for ip in ip_list:
-                new_value = random.randint(5, 100)
+                # make a call to the WLED JSON api and get the value of the param
+#                new_value = random.randint(5, 100)
+                new_value = wled.get_param(ip, params[0])
                 data_source[str(ip)]['x'].append(elapsed_time)
                 data_source[str(ip)]['y'].append(new_value)
+
+
+def open_browser():
+    webbrowser.open_new("http://localhost:5006")
 
 def make_document(doc, args, ip_list, params):
 
@@ -44,17 +54,17 @@ def make_document(doc, args, ip_list, params):
 
     for index, ip in enumerate(data_source.keys()):
         source_dict[ip] = ColumnDataSource(data=dict(x=[], y=[]))
-        plot.line("x", "y", source=source_dict[ip], name=ip, color=palette[index % len(palette)], legend_label=ip)
+        plot.line("x", "y", source=source_dict[ip], name=ip, color=palette[index % len(palette)], legend_label=f"{ip}: {data_source[ip]['name']}")
 
-        plot.legend.location = "top_left"
-        plot.legend.click_policy = "hide"
+    plot.legend.location = "top_left"
+    plot.legend.click_policy = "hide"
 
-        xwheel_zoom = WheelZoomTool(dimensions="width")
-        plot.add_tools(xwheel_zoom)
-        plot.toolbar.active_scroll = xwheel_zoom
-        x_pan = PanTool(dimensions="width")
-        plot.add_tools(x_pan)
-        plot.toolbar.active_drag = x_pan
+    xwheel_zoom = WheelZoomTool(dimensions="width")
+    plot.add_tools(xwheel_zoom)
+    plot.toolbar.active_scroll = xwheel_zoom
+    x_pan = PanTool(dimensions="width")
+    plot.add_tools(x_pan)
+    plot.toolbar.active_drag = x_pan
 
     def update():
         with data_lock:
@@ -76,7 +86,7 @@ def make_document(doc, args, ip_list, params):
                         'x': data_source[ip]['x'][start_index:],
                         'y': data_source[ip]['y'][start_index:]
                     }
-                    source_dict[ip].stream(new_data, rollover=20000)
+                    source_dict[ip].stream(new_data, rollover=args.rollover)
 
     doc.add_periodic_callback(update, args.period * 1000)
     doc.add_root(column(plot))
@@ -99,6 +109,8 @@ def run_bokeh_app(args, ip_list, params):
     # Start the Bokeh server with the application
     server = Server({'/': bokeh_app}, **server_settings)
     server.start()
+
+    threading.Thread(target=open_browser).start()
 
     _LOGGER.info(
         f"Serving Bokeh app on http://{server_settings['address']}:{server_settings['port']}/")

@@ -34,7 +34,7 @@ def parse_args():
         "-p",
         "--params",
         dest="params",
-        help="comma seperated list of params to attempt to log, default is fps",
+        help="comma seperated list of params to attempt to log, default is fps, NOT SUPPORTED LEAVE DEFAULT",
         default="fps",
         type=str,
     )
@@ -48,12 +48,21 @@ def parse_args():
         type=float,
     )
 
+    parser.add_argument(
+        "-r",
+        "--rollover",
+        dest="rollover",
+        help="int value to rollover the points default is 20000",
+        default=20000,
+        type=int,
+    )
+
     return parser.parse_args()
 
 
 
 if __name__ == '__main__':
-    utils.setup_logging(logging.DEBUG)
+    utils.setup_logging(logging.INFO)
     # use argsys library to get the command line arguments
     # this will be a list of WLED endpoints
     args = parse_args()

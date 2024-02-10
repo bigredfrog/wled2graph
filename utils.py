@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import ipaddress
-
+import argparse
 
 def setup_logging(loglevel):
     console_loglevel = loglevel or logging.WARNING
@@ -63,6 +63,8 @@ def process_ip_list(ip_list_str):
         except ipaddress.AddressValueError:
             raise argparse.ArgumentTypeError(f"Invalid IP address: {ip_str}")
 
+    # sort list by ip address
+    ip_objects.sort()
     return ip_objects
 
 
