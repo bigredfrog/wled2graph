@@ -57,10 +57,10 @@ To start monitoring five WLED endpoints with a polling interval of 1 seconds and
 ```bash
 python wled2graph.py -w "192.168.1.216, 192.168.1.217, 192.168.1.220, 192.168.1.229, 192.168.1.230" -t 1 -r 30
 ```
-Contributing
+## Contributing
 I just don't know if this has legs right now...
 
-License
+## License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 
 https://github.com/bigredfrog/wled2graph/blob/master/license.md
