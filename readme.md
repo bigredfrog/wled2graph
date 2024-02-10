@@ -13,9 +13,7 @@ WLED2Graph is a Python program designed to visualize Frames Per Second (FPS) dat
 
 Before you begin, ensure you have met the following requirements:
 
-- Python 3.6 or higher
-- Bokeh library
-- Requests library (if making HTTP requests to WLED endpoints)
+- Python 3.9 or higher
 
 You can install the necessary Python libraries by running:
 
@@ -39,9 +37,9 @@ WLED2Graph is executed from the command line and requires a list of IP addresses
 python wled2graph.py -w <WLED_IPs> [-p <params>] [-t <time_period>] [-r <rollover>]
 ```
 
--w, --wleds: A comma-separated list of IP addresses for the WLED endpoints.
--t, --time-period: (Optional) The time period in seconds for polling the WLEDs. Default is 5 seconds.
--r, --rollover: (Optional) The number of data points to keep in the graph before rolling over. Default is 20000.
+-w, --wleds: A comma-separated list of IP addresses for the WLED endpoints.  
+-t, --time-period: (Optional) The time period in seconds for polling the WLEDs. Default is 5 seconds.  
+-r, --rollover: (Optional) The number of data points to keep in the graph before rolling over. Default is 20000.  
 
 This is not currently supported
 
@@ -65,7 +63,4 @@ I just don't know if this has legs right now...
 License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 
-arduino
-Copy code
-
-Please adjust the repository URL (`https://github.com/yourusername/wled2gr
+https://github.com/bigredfrog/wled2graph/blob/master/license.md
