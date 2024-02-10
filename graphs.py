@@ -23,11 +23,15 @@ data_source = {}
 data_lock = Lock()
 palette = Category10[10]
 
-def data_capture(start_time, args, ip_list, params):
-    for ip in ip_list:
-        name = wled.get_name(ip)
-        data_source[str(ip)] = {"name":name, 'x': [], 'y': []}
+def get_names(ip_list):
+    with data_lock:
+        for ip in ip_list:
+            _LOGGER.info(f"getting name for {ip}")
+            name = wled.get_name(ip)
+            _LOGGER.info(f"name : LED count = {name}")
+            data_source[str(ip)] = {"name":name, 'x': [], 'y': []}
 
+def data_capture(start_time, args, ip_list, params):
     while True:
         time.sleep(args.period)  # Simulate data capture every 500ms
         elapsed_time = (datetime.now() - start_time).total_seconds()
@@ -95,10 +99,14 @@ def make_document(doc, args, ip_list, params):
 def run_bokeh_app(args, ip_list, params):
     start_time = datetime.now()
 
+    get_names(ip_list)
+
     # Start data capture in a background thread
     data_thread = Thread(target=data_capture, args=(start_time, args,  ip_list, params))
     data_thread.daemon = True  # Ensures the thread exits when the main program does
     data_thread.start()
+
+    logging.getLogger('bokeh').setLevel(logging.INFO)
 
     # Create the Bokeh application
     bokeh_app = Application(FunctionHandler(partial(make_document, args=args, ip_list=ip_list, params=params)))
