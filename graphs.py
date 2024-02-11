@@ -11,7 +11,7 @@ import threading
 _LOGGER = logging.getLogger(__name__)
 
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource
+from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.layouts import column
 from bokeh.server.server import Server
 from bokeh.application import Application
@@ -58,7 +58,8 @@ def make_document(doc, args, ip_list, params):
 
     for index, ip in enumerate(data_source.keys()):
         source_dict[ip] = ColumnDataSource(data=dict(x=[], y=[]))
-        plot.line("x", "y", source=source_dict[ip], name=ip, color=palette[index % len(palette)], legend_label=f"{ip}: {data_source[ip]['name']}")
+        full_name = f"{ip}: {data_source[ip]['name']}"
+        plot.line("x", "y", source=source_dict[ip], name=full_name, color=palette[index % len(palette)], legend_label=full_name)
 
     plot.legend.location = "top_left"
     plot.legend.click_policy = "hide"
@@ -69,6 +70,13 @@ def make_document(doc, args, ip_list, params):
     x_pan = PanTool(dimensions="width")
     plot.add_tools(x_pan)
     plot.toolbar.active_drag = x_pan
+    hover = HoverTool()
+    hover.tooltips = [
+        ("key", "$name"),
+        ("fps", "@y"),
+    ]
+
+    plot.add_tools(hover)
 
     def update():
         with data_lock:
@@ -92,6 +100,7 @@ def make_document(doc, args, ip_list, params):
                     }
                     source_dict[ip].stream(new_data, rollover=args.rollover)
 
+    doc.theme = "dark_minimal"
     doc.add_periodic_callback(update, args.period * 1000)
     doc.add_root(column(plot))
 
