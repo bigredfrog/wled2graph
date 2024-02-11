@@ -70,11 +70,20 @@ def make_document(doc, args, ip_list, params):
     x_pan = PanTool(dimensions="width")
     plot.add_tools(x_pan)
     plot.toolbar.active_drag = x_pan
-    hover = HoverTool()
-    hover.tooltips = [
-        ("key", "$name"),
-        ("fps", "@y"),
-    ]
+    doc.theme = "dark_minimal"
+
+    custom_tooltip = """
+        <div style="background: black; padding: 10px; border-radius: 10px; border: 1px solid white;">
+            <div style="color: white;">key: $name</div>
+            <div style="color: white;">fps: @y</div>
+        </div>
+    """
+
+    hover = HoverTool(tooltips=custom_tooltip)
+    # hover.tooltips = [
+    #     ("key", "$name"),
+    #     ("fps", "@y"),
+    # ]
 
     plot.add_tools(hover)
 
@@ -100,7 +109,6 @@ def make_document(doc, args, ip_list, params):
                     }
                     source_dict[ip].stream(new_data, rollover=args.rollover)
 
-    doc.theme = "dark_minimal"
     doc.add_periodic_callback(update, args.period * 1000)
     doc.add_root(column(plot))
 
