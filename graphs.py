@@ -80,11 +80,6 @@ def make_document(doc, args, ip_list, params):
     """
 
     hover = HoverTool(tooltips=custom_tooltip)
-    # hover.tooltips = [
-    #     ("key", "$name"),
-    #     ("fps", "@y"),
-    # ]
-
     plot.add_tools(hover)
 
     def update():
