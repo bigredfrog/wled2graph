@@ -34,7 +34,7 @@ WLED2Graph is executed from the command line and requires a list of IP addresses
 
 ```bash
 
-python wled2graph.py -w <WLED_IPs> [-p <params>] [-t <time_period>] [-r <rollover>]
+python main.py -w <WLED_IPs> [-p <params>] [-t <time_period>] [-r <rollover>]
 ```
 
 -w, --wleds: A comma-separated list of IP addresses for the WLED endpoints.  
@@ -49,13 +49,13 @@ This is not currently supported
 To start monitoring two WLED endpoints with a polling interval of 10 seconds:
 
 ```bash
-python wled2graph.py -w 192.168.1.100,192.168.1.101 -t 10
+python main.py -w 192.168.1.100,192.168.1.101 -t 10
 ```
 
 To start monitoring five WLED endpoints with a polling interval of 1 seconds and a data point rollover of 30:
 
 ```bash
-python wled2graph.py -w "192.168.1.216, 192.168.1.217, 192.168.1.220, 192.168.1.229, 192.168.1.230" -t 1 -r 30
+python main.py -w "192.168.1.216, 192.168.1.217, 192.168.1.220, 192.168.1.229, 192.168.1.230" -t 1 -r 30
 ```
 ## Contributing
 I just don't know if this has legs right now...
