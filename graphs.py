@@ -73,7 +73,7 @@ def make_document(doc, args, ip_list, params):
     doc.theme = "dark_minimal"
 
     custom_tooltip = """
-        <div style="background: black; padding: 10px; border-radius: 10px; border: 1px solid white;">
+        <div style="background: black; padding: 10px; border-radius: 10px; border: 1px solid white; margin: -10px;">
             <div style="color: white;">key: $name</div>
             <div style="color: white;">fps: @y</div>
         </div>
