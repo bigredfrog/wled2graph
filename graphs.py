@@ -54,12 +54,17 @@ def make_document(doc, args, ip_list, params):
     param = params[0]
     plot = figure(title=f"Real-time update for {param}",
                   x_axis_label="time (s)", y_axis_label=f"{param}", width=1500,
-                  height=500)
+                  height=750)
 
     for index, ip in enumerate(data_source.keys()):
         source_dict[ip] = ColumnDataSource(data=dict(x=[], y=[]))
         full_name = f"{ip}: {data_source[ip]['name']}"
-        plot.line("x", "y", source=source_dict[ip], name=full_name, color=palette[index % len(palette)], legend_label=full_name)
+        plot.line("x", "y",
+                  source=source_dict[ip],
+                  name=full_name,
+                  color=palette[index % len(palette)],
+                  legend_label=full_name,
+                  line_width=4)
 
     plot.legend.location = "top_left"
     plot.legend.click_policy = "hide"
