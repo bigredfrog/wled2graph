@@ -39,10 +39,10 @@ def data_capture(start_time, args, ip_list, params):
         with data_lock:
             for ip in ip_list:
                 # make a call to the WLED JSON api and get the value of the param
-#                new_value = random.randint(5, 100)
-                new_value = wled.get_param(ip, params[0])
-                data_source[str(ip)]['x'].append(elapsed_time)
-                data_source[str(ip)]['y'].append(new_value)
+                if data_source[str(ip)]['name'] is not None:
+                    new_value = wled.get_param(ip, params[0])
+                    data_source[str(ip)]['x'].append(elapsed_time)
+                    data_source[str(ip)]['y'].append(new_value)
 
 
 def open_browser():
