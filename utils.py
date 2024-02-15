@@ -1,7 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
-import ipaddress
-import argparse
+
 
 def setup_logging(loglevel):
     console_loglevel = loglevel or logging.WARNING
@@ -44,35 +43,5 @@ def setup_logging(loglevel):
 
     global _LOGGER
     _LOGGER = logging.getLogger(__name__)
-
-
-def process_ip_list(ip_list_str):
-    # Split the string into individual IP addresses
-    ip_list = ip_list_str.split(',')
-
-    # Check if there is at least one IP address
-    if not ip_list:
-        raise argparse.ArgumentTypeError("At least one IP address is required")
-
-    # Validate each IP address in the list and convert them to ipaddress objects
-    ip_objects = []
-    for ip_str in ip_list:
-        try:
-            ip_objects.append(ipaddress.IPv4Address(
-                ip_str.strip()))  # Create ipaddress object
-        except ipaddress.AddressValueError:
-            raise argparse.ArgumentTypeError(f"Invalid IP address: {ip_str}")
-
-    # sort list by ip address
-    ip_objects.sort()
-    return ip_objects
-
-
-def process_fields(input_string):
-    # Split the string by commas
-    tokens = input_string.split(',')
-    # Replace spaces with underscores in each token
-    processed_tokens = [token.strip().replace(' ', '_') for token in tokens]
-    return processed_tokens
 
 

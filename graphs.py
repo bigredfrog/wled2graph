@@ -1,4 +1,3 @@
-import random
 import logging
 from functools import partial
 from datetime import datetime
@@ -23,24 +22,26 @@ data_source = {}
 data_lock = Lock()
 palette = Category10[10]
 
-def get_names(ip_list):
+def get_names(args):
     with data_lock:
-        for ip in ip_list:
+        for ip in args.ip_list:
             _LOGGER.info(f"getting name for {ip}")
-            name = wled.get_name(ip)
+            name = wled.get_name(args, ip)
             _LOGGER.info(f"name : LED count = {name}")
             data_source[str(ip)] = {"name":name, 'x': [], 'y': []}
 
-def data_capture(start_time, args, ip_list, params):
+
+def data_capture(args, start_time):
+
     while True:
-        time.sleep(args.period)  # Simulate data capture every 500ms
+        time.sleep(args.args.period)
         elapsed_time = (datetime.now() - start_time).total_seconds()
 
         with data_lock:
-            for ip in ip_list:
+            for ip in args.ip_list:
                 # make a call to the WLED JSON api and get the value of the param
                 if data_source[str(ip)]['name'] is not None:
-                    new_value = wled.get_param(ip, params[0])
+                    new_value = wled.get_param(args, ip, args.params[0])
                     data_source[str(ip)]['x'].append(elapsed_time)
                     data_source[str(ip)]['y'].append(new_value)
 
@@ -48,10 +49,10 @@ def data_capture(start_time, args, ip_list, params):
 def open_browser():
     webbrowser.open_new("http://localhost:5006")
 
-def make_document(doc, args, ip_list, params):
+def make_document(doc, args):
 
     source_dict = {}
-    param = params[0]
+    param = args.params[0]
     plot = figure(title=f"Real-time update for {param}",
                   x_axis_label="time (s)", y_axis_label=f"{param}", width=1500,
                   height=750)
@@ -107,26 +108,26 @@ def make_document(doc, args, ip_list, params):
                         'x': data_source[ip]['x'][start_index:],
                         'y': data_source[ip]['y'][start_index:]
                     }
-                    source_dict[ip].stream(new_data, rollover=args.rollover)
+                    source_dict[ip].stream(new_data, rollover=args.args.rollover)
 
-    doc.add_periodic_callback(update, args.period * 1000)
+    doc.add_periodic_callback(update, args.args.period * 1000)
     doc.add_root(column(plot))
 
 
-def run_bokeh_app(args, ip_list, params):
+def run_bokeh_app(args):
     start_time = datetime.now()
 
-    get_names(ip_list)
+    get_names(args)
 
     # Start data capture in a background thread
-    data_thread = Thread(target=data_capture, args=(start_time, args,  ip_list, params))
+    data_thread = Thread(target=data_capture, args=(args, start_time))
     data_thread.daemon = True  # Ensures the thread exits when the main program does
     data_thread.start()
 
     logging.getLogger('bokeh').setLevel(logging.INFO)
 
     # Create the Bokeh application
-    bokeh_app = Application(FunctionHandler(partial(make_document, args=args, ip_list=ip_list, params=params)))
+    bokeh_app = Application(FunctionHandler(partial(make_document, args=args)))
 
     # Define server settings here as needed
     server_settings = {'port': 5006, 'address': 'localhost'}
