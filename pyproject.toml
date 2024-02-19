@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "wled2graph"
+version = "0.1.0"
+description = ""
+authors = ["atod <anthony.tod@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+bokeh = "^3.3.4"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
