@@ -22,13 +22,15 @@ data_source = {}
 data_lock = Lock()
 palette = Category10[10]
 
+graph_height = 480
+
 def get_names(args):
     with data_lock:
         for ip in args.ip_list:
             _LOGGER.info(f"getting name for {ip}")
             name = wled.get_name(args, ip)
             _LOGGER.info(f"name : LED count = {name}")
-            data_source[str(ip)] = {"name":name, 'x': [], 'y': []}
+            data_source[str(ip)] = {"name":name, 'x': [], 'y': [], "p": []}
 
 
 def data_capture(args, start_time):
@@ -44,6 +46,9 @@ def data_capture(args, start_time):
                     new_value = wled.get_param(args, ip, args.params[0])
                     data_source[str(ip)]['x'].append(elapsed_time)
                     data_source[str(ip)]['y'].append(new_value)
+                    # get ping for ip
+                    new_ping = wled.get_ping(args, ip)
+                    data_source[str(ip)]['p'].append(new_ping)
 
 
 def open_browser():
@@ -53,40 +58,62 @@ def make_document(doc, args):
 
     source_dict = {}
     param = args.params[0]
-    plot = figure(title=f"Real-time update for {param}",
+    plot_params = figure(title=f"Real-time update for {param}",
                   x_axis_label="time (s)", y_axis_label=f"{param}", width=1500,
-                  height=750)
+                  height=graph_height)
+
+    plot_ping = figure(title="Real-time update for ping",
+                  x_axis_label="time (s)", y_axis_label="ping (ms)", width=1500,
+                  height=graph_height, x_range=plot_params.x_range)
 
     for index, ip in enumerate(data_source.keys()):
-        source_dict[ip] = ColumnDataSource(data=dict(x=[], y=[]))
+        source_dict[ip] = ColumnDataSource(data=dict(x=[], y=[], p=[]))
         full_name = f"{ip}: {data_source[ip]['name']}"
-        plot.line("x", "y",
+        plot_params.line("x", "y",
                   source=source_dict[ip],
                   name=full_name,
                   color=palette[index % len(palette)],
                   legend_label=full_name,
                   line_width=4)
 
-    plot.legend.location = "top_left"
-    plot.legend.click_policy = "hide"
+        plot_ping.line("x", "p",
+                    source=source_dict[ip],
+                    name=full_name,
+                    color=palette[index % len(palette)],
+                    legend_label=full_name,
+                    line_width=4)
+
+    plot_params.legend.location = "top_left"
+    plot_params.legend.click_policy = "hide"
+
+    plot_ping.legend.location = "top_left"
+    plot_ping.legend.click_policy = "hide"
 
     xwheel_zoom = WheelZoomTool(dimensions="width")
-    plot.add_tools(xwheel_zoom)
-    plot.toolbar.active_scroll = xwheel_zoom
+    plot_params.add_tools(xwheel_zoom)
+    plot_params.toolbar.active_scroll = xwheel_zoom
+    plot_ping.add_tools(xwheel_zoom)
+    plot_ping.toolbar.active_scroll = xwheel_zoom
+
     x_pan = PanTool(dimensions="width")
-    plot.add_tools(x_pan)
-    plot.toolbar.active_drag = x_pan
+    plot_params.add_tools(x_pan)
+    plot_params.toolbar.active_drag = x_pan
+    plot_ping.add_tools(x_pan)
+    plot_ping.toolbar.active_drag = x_pan
+
     doc.theme = "dark_minimal"
 
     custom_tooltip = """
         <div style="background: black; margin:-10px; padding: 10px; border-radius: 10px; border: 1px solid white; font-weight: 600; font-size: 14px;">
             <div style="color: white;">key: $name</div>
             <div style="color: white;">fps: @y</div>
+            <div style="color: white;">png: @p ms</div>
         </div>
     """
 
     hover = HoverTool(tooltips=custom_tooltip)
-    plot.add_tools(hover)
+    plot_params.add_tools(hover)
+    plot_ping.add_tools(hover)
 
     def update():
         with data_lock:
@@ -106,12 +133,13 @@ def make_document(doc, args):
                     # It means we have new data points to stream
                     new_data = {
                         'x': data_source[ip]['x'][start_index:],
-                        'y': data_source[ip]['y'][start_index:]
+                        'y': data_source[ip]['y'][start_index:],
+                        'p': data_source[ip]['p'][start_index:]
                     }
                     source_dict[ip].stream(new_data, rollover=args.args.rollover)
 
     doc.add_periodic_callback(update, args.args.period * 1000)
-    doc.add_root(column(plot))
+    doc.add_root(column(plot_params, plot_ping))
 
 
 def run_bokeh_app(args):

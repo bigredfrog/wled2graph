@@ -1,6 +1,7 @@
 import requests
 import logging
 import random
+import icmplib
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -18,6 +19,17 @@ def get_param(args, ip, param):
         result = response.json()["leds"][param]
 #    _LOGGER.info(f"response is {json.dumps(response.json(), indent=4)}")
     return result
+
+
+def get_ping(args, ip):
+    ping = icmplib.ping(
+        address=str(ip),
+        count=1,
+        privileged=False,
+        interval=0.1,
+        timeout=0.500,
+    )
+    return ping.avg_rtt
 
 
 def get_name(args, ip):

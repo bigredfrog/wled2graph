@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 bokeh = "^3.3.4"
 requests = "^2.31.0"
+icmplib = "^3.0.4"
 
 
 [build-system]
