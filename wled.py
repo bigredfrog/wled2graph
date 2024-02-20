@@ -1,3 +1,4 @@
+import numpy as np
 import requests
 import logging
 import random
@@ -7,6 +8,7 @@ _LOGGER = logging.getLogger(__name__)
 
 offline = True
 
+# 192.168.1.227, 192.168.1.228,
 
 def get_param(args, ip, param):
     if args.args.offline:
@@ -22,6 +24,12 @@ def get_param(args, ip, param):
 
 
 def get_ping(args, ip):
+    ###
+    # ping the ip address and return the average round trip time
+    # if the ping fails, return np.nan which will cause a line
+    # break in the graph om bokeh
+    ###
+
     ping = icmplib.ping(
         address=str(ip),
         count=1,
@@ -29,7 +37,13 @@ def get_ping(args, ip):
         interval=0.1,
         timeout=0.500,
     )
-    return ping.avg_rtt
+
+    if ping.packets_received == 0:
+        result = np.nan
+    else:
+        result = ping.avg_rtt
+    return result
+
 
 
 def get_name(args, ip):
