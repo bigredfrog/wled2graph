@@ -20,7 +20,7 @@ if __name__ == '__main__':
     utils.setup_logging(logging.INFO)
 
     args.parse_args()
-    _LOGGER.info(f"args are {args}")
+    _LOGGER.info(f"args are {args.args}")
 
     graphs.run_bokeh_app(args)
 
