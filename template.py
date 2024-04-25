@@ -1,4 +1,4 @@
-template = """
+css_template = """
 {% block head %}
 <style>
     body {
@@ -17,6 +17,7 @@ template = """
         border: 1px solid #fff;
         padding: 8px;
         color: #fff;
+        font-size: 16px;
     }
     th {
         background-color: #555;
@@ -24,4 +25,22 @@ template = """
 </style>
 {{ super() }}
 {% endblock %}
+"""
+
+css_table = """
+<style>
+    .my-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .my-table th, .my-table td {
+        border: 1px solid #fff;
+        padding: 12px;
+        color: #fff;
+        font-size: 20px;
+    }
+    .my-table th {
+        background-color: #555;
+    }
+</style>
 """

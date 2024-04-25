@@ -18,7 +18,7 @@ from bokeh.application.handlers.function import FunctionHandler
 from bokeh.palettes import Category10
 from bokeh.models import WheelZoomTool, PanTool, Div
 
-from template import template
+from template import css_template, css_table
 
 data_source = {}
 data_lock = Lock()
@@ -27,7 +27,7 @@ palette = Category10[10]
 graph_height = 480
 
 
-div_head = Div(text=f"<h1>Page Heading</h1>")
+div_head = Div(text=f'<h1><a href="https://github.com/bigredfrog/wled2graph" target="_blank" style="color: inherit;">wled2graph</h1>')
 div_lines = Div(text="<p>Network Name: XYZ</p><p>BSSID: ABC123</p>")
 
 # TODO: Need a distinction between those we graph and those we only hover
@@ -41,7 +41,7 @@ def get_names(args):
             _LOGGER.info(f"getting name for {ip}")
             name, count = wled.get_name(args, ip)
             _LOGGER.info(f"name : LED count = {name} : {count}")
-            data_source[str(ip)] = {"name":name, "count":count, 'x': [], "p": []}
+            data_source[str(ip)] = {'name':name, 'count':count, 'x': [], "p": []}
             for field in fields:
                 data_source[str(ip)][field] = []
 
@@ -156,7 +156,9 @@ def make_document(doc, args):
 
     def update():
         with data_lock:
-            new_div_text = ""
+            new_table_html = f"<table class='my-table'>"
+            new_table_html += "<tr><th>IP</th><th>Name</th><th>Leds</th><th>BSSID</th><th>RSSI</th></tr>"
+
             for ip in data_source.keys():
                 x_values = source_dict[ip].data['x']
                 last_x = x_values[-1] if x_values else -float('inf')
@@ -179,12 +181,12 @@ def make_document(doc, args):
                         'p': data_source[ip]['p'][start_index:]
                     }
                     source_dict[ip].stream(new_data, rollover=args.args.rollover)
-                # always refresh to last data
-                new_div_text = f"{new_div_text}<p>IP: {ip} Name: {data_source[ip]['name']} Count: {data_source[ip]['count']} RSSI: {data_source[ip]['rssi'][-1]} BSSID: {data_source[ip]['bssid'][-1]}</p>"
-            div_lines.text = new_div_text
+                new_table_html += f"<tr><td style='color: blue;'><a href='http://{ip}' target='_blank' style='color: inherit;'>{ip}</td><td>{data_source[ip]['name']}</td><td>{data_source[ip]['count']}</td><td>{data_source[ip]['bssid'][-1]}</td><td>{data_source[ip]['rssi'][-1]}</td></tr>"
+            new_table_html += '</table>'
+            div_lines.text = f"{css_table}{new_table_html}"
 
     doc.add_periodic_callback(update, args.args.period * 1000)
-    doc.template = template
+    doc.template = css_template
     doc.add_root(column(div_head, div_lines, plot_params, plot_ping, plot_rssi))
 
 
