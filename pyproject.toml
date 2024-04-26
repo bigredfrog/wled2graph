@@ -2,16 +2,19 @@
 name = "wled2graph"
 version = "0.1.0"
 description = ""
-authors = ["atod <anthony.tod@gmail.com>"]
+authors = ["bigredfrog <big.red.frog@gmail.com>"]
 readme = "README.md"
+license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.9"
 bokeh = "^3.3.4"
 requests = "^2.31.0"
 icmplib = "^3.0.4"
 
-
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+wled2graph = 'wled2graph.main:main'
