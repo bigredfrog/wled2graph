@@ -12,14 +12,43 @@ WLED2Graph is a Python program designed to visualize Frames Per Second (FPS) dat
 - **Scalable**: Can monitor multiple WLED endpoints simultaneously.
 - **Customizable Data Points Rollover**: Supports setting a maximum number of data points to display on the graph, after which old data points are rolled off.
 
+
+## Installation from PyPi
+
+```bash
+pip install wled2graph
+```
+
+WLED2Graph is executed from the command line and requires a list of IP addresses corresponding to the WLED endpoints you wish to monitor.
+
+```bash
+wled2graph -w <WLED_IPs> [-t <time_period>] [-r <rollover>]
+```
+
+-w, --wleds: A comma-separated list of IP addresses for the WLED endpoints.  
+-t, --time-period: (Optional) The time period in seconds for polling the WLEDs. Default is 5 seconds.  
+-r, --rollover: (Optional) The number of data points to keep in the graph before rolling over. Default is 20000.  
+
+### Example
+To start monitoring two WLED endpoints with a polling interval of 10 seconds:
+
+```bash
+wled2graph -w 192.168.1.100,192.168.1.101 -t 10
+```
+
+To start monitoring five WLED endpoints with a polling interval of 1 seconds and a data point rollover of 30:
+
+```bash
+wled2graph -w "192.168.1.216, 192.168.1.217, 192.168.1.220, 192.168.1.229, 192.168.1.230" -t 1 -r 30
+```
+
+# How to develop on wled2graph
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 
 - Python 3.9 or higher
 - [Poetry](https://python-poetry.org/docs/#installation), a tool for dependency management in Python projects.
-
-## Installation
 
 1. Clone the repository to your local machine:
 
@@ -36,7 +65,7 @@ Before you begin, ensure you have met the following requirements:
 
     This will create a virtual environment and install the necessary Python libraries.
 
-## Usage
+## Development Usage
 
 WLED2Graph is executed from the command line and requires a list of IP addresses corresponding to the WLED endpoints you wish to monitor.
 

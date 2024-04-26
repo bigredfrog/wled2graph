@@ -3,7 +3,7 @@ from functools import partial
 from datetime import datetime
 import time
 from threading import Thread, Lock
-import wled
+from wled2graph import wled
 import webbrowser
 import threading
 
@@ -19,7 +19,7 @@ from bokeh.palettes import Category10
 from bokeh.models import WheelZoomTool, PanTool, Div
 
 # WARNING template is over ridden by bokeh in many cases!
-from template import css_template, css_table
+from wled2graph.template import css_template, css_table
 
 data_source = {}
 data_lock = Lock()
