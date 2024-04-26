@@ -2,9 +2,12 @@
 
 WLED2Graph is a Python program designed to visualize Frames Per Second (FPS) data and other from WLED endpoints on a network in real-time using a Bokeh graph server. It sets up a polling loop, defaulting to every 5 seconds, to fetch the current JSON state from each specified WLED endpoint
 
+![WLED2Graph](wled2graph.png)
+
 ## Features
 
 - **Real-time FPS, BSSID, RSSI and Ping Visualization**: Continuously polls WLED endpoints and updates the graph with current FPS values.
+- **IP address hyperlink to WLED UI**: Just click through direct to the WLED UI for the selected WLED endpoint.
 - **Configurable Polling Frequency**: Allows customization of the polling interval to suit network and performance needs.
 - **Scalable**: Can monitor multiple WLED endpoints simultaneously.
 - **Customizable Data Points Rollover**: Supports setting a maximum number of data points to display on the graph, after which old data points are rolled off.
