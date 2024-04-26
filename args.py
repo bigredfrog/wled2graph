@@ -46,9 +46,6 @@ class Args:
         self.ip_list = process_ip_list(self.args.wleds)
         _LOGGER.info(f"ips are {self.ip_list}")
 
-        self.params = process_fields(self.args.params)
-        _LOGGER.info(f"params are {self.params}")
-
     def parse_args(self):
         parser = argparse.ArgumentParser(
             description="A Networked LED Effect Controller"
@@ -60,15 +57,6 @@ class Args:
             dest="wleds",
             help="comma seperated list of ip addresses",
             required=True,
-            type=str,
-        )
-
-        parser.add_argument(
-            "-p",
-            "--params",
-            dest="params",
-            help="comma seperated list of params to attempt to log, default is fps, NOT SUPPORTED LEAVE DEFAULT",
-            default="fps",
             type=str,
         )
 

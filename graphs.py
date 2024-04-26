@@ -18,6 +18,7 @@ from bokeh.application.handlers.function import FunctionHandler
 from bokeh.palettes import Category10
 from bokeh.models import WheelZoomTool, PanTool, Div
 
+# WARNING template is over ridden by bokeh in many cases!
 from template import css_template, css_table
 
 data_source = {}
@@ -26,9 +27,8 @@ palette = Category10[10]
 
 graph_height = 480
 
-
-div_head = Div(text=f'<h1><a href="https://github.com/bigredfrog/wled2graph" target="_blank" style="color: inherit;">wled2graph</h1>')
-div_lines = Div(text="<p>Network Name: XYZ</p><p>BSSID: ABC123</p>")
+div_head = Div(text=f'<h1 style="font-size: 30px;"><a href="https://github.com/bigredfrog/wled2graph" target="_blank" style="color: inherit;">wled2graph</h1>')
+div_lines = Div(text="<p>Please hold</p>")
 
 # TODO: Need a distinction between those we graph and those we only hover
 fields = ['fps', 'rssi', 'bssid']
@@ -54,7 +54,6 @@ def data_capture(args, start_time):
 
         with data_lock:
             for ip in args.ip_list:
-                # make a call to the WLED JSON api and get the value of the param
                 if data_source[str(ip)]['name'] is not None:
                     values = wled.get_param(args, ip, paths)
                     data_source[str(ip)]['x'].append(elapsed_time)
@@ -74,9 +73,8 @@ def make_document(doc, args):
 
     source_dict = {}
     # TODO: create graphs data driven from fields
-    param = args.params[0]
     plot_params = figure(title=f"Real-time update for fps",
-                  x_axis_label="time (s)", y_axis_label=f"{param}", width=1500,
+                  x_axis_label="time (s)", y_axis_label=f"FPS", width=1500,
                   height=graph_height)
 
     plot_ping = figure(title="Real-time update for ping",
@@ -157,9 +155,9 @@ def make_document(doc, args):
     def update():
         with data_lock:
             new_table_html = f"<table class='my-table'>"
-            new_table_html += "<tr><th>IP</th><th>Name</th><th>Leds</th><th>BSSID</th><th>RSSI</th></tr>"
+            new_table_html += f"<tr><th>IP</th><th>Name</th><th>  Leds  </th><th>   FPS   </th><th>BSSID</th><th>  RSSI  </th><th>Ping(ms)</th></tr>"
 
-            for ip in data_source.keys():
+            for idx, ip in enumerate(data_source.keys()):
                 x_values = source_dict[ip].data['x']
                 last_x = x_values[-1] if x_values else -float('inf')
 
@@ -181,7 +179,16 @@ def make_document(doc, args):
                         'p': data_source[ip]['p'][start_index:]
                     }
                     source_dict[ip].stream(new_data, rollover=args.args.rollover)
-                new_table_html += f"<tr><td style='color: blue;'><a href='http://{ip}' target='_blank' style='color: inherit;'>{ip}</td><td>{data_source[ip]['name']}</td><td>{data_source[ip]['count']}</td><td>{data_source[ip]['bssid'][-1]}</td><td>{data_source[ip]['rssi'][-1]}</td></tr>"
+                cl = Category10[10][idx % 10]
+                td_style = f"<td style='color: {cl};'>"
+                new_table_html += f"<tr>{td_style}<a href='http://{ip}' target='_blank' style='color: inherit;'>{ip}</td>"+\
+                                  f"{td_style}{data_source[ip]['name']}</td>"+\
+                                  f"<td>{data_source[ip]['count']}</td>"+\
+                                  f"<td>{data_source[ip]['fps'][-1]}</td>"+\
+                                  f"<td>{data_source[ip]['bssid'][-1]}</td>"+\
+                                  f"<td>{data_source[ip]['rssi'][-1]}</td>"+\
+                                  f"<td>{data_source[ip]['p'][-1]:.0f}</td></tr>"
+
             new_table_html += '</table>'
             div_lines.text = f"{css_table}{new_table_html}"
 

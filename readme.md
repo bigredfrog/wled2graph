@@ -1,10 +1,10 @@
 # WLED2Graph
 
-WLED2Graph is a Python program designed to visualize Frames Per Second (FPS) data from WLED endpoints on a network in real-time using a Bokeh graph server. It sets up a polling loop, defaulting to every 5 seconds, to fetch the current JSON state from each specified WLED endpoint, focusing on recovering and displaying FPS values.
+WLED2Graph is a Python program designed to visualize Frames Per Second (FPS) data and other from WLED endpoints on a network in real-time using a Bokeh graph server. It sets up a polling loop, defaulting to every 5 seconds, to fetch the current JSON state from each specified WLED endpoint
 
 ## Features
 
-- **Real-time FPS Visualization**: Continuously polls WLED endpoints and updates the graph with current FPS values.
+- **Real-time FPS, BSSID, RSSI and Ping Visualization**: Continuously polls WLED endpoints and updates the graph with current FPS values.
 - **Configurable Polling Frequency**: Allows customization of the polling interval to suit network and performance needs.
 - **Scalable**: Can monitor multiple WLED endpoints simultaneously.
 - **Customizable Data Points Rollover**: Supports setting a maximum number of data points to display on the graph, after which old data points are rolled off.
@@ -34,16 +34,12 @@ WLED2Graph is executed from the command line and requires a list of IP addresses
 
 ```bash
 
-python main.py -w <WLED_IPs> [-p <params>] [-t <time_period>] [-r <rollover>]
+python main.py -w <WLED_IPs> [-t <time_period>] [-r <rollover>]
 ```
 
 -w, --wleds: A comma-separated list of IP addresses for the WLED endpoints.  
 -t, --time-period: (Optional) The time period in seconds for polling the WLEDs. Default is 5 seconds.  
 -r, --rollover: (Optional) The number of data points to keep in the graph before rolling over. Default is 20000.  
-
-This is not currently supported
-
--p, --params: (Optional) A comma-separated list of parameters to log. Currently, only fps is supported.
 
 ### Example
 To start monitoring two WLED endpoints with a polling interval of 10 seconds:
