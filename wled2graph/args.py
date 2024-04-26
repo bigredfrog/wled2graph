@@ -78,12 +78,19 @@ class Args:
             type=int,
         )
 
-        # add a param -o --offline to simulate the WLEDs
         parser.add_argument(
             "-o",
             "--offline",
             dest="offline",
             help="simulate the WLED endpoints, default is False",
+            action="store_true",
+        )
+
+        parser.add_argument(
+            "-m",
+            "--remote",
+            dest="remote",
+            help="allow remote access to server, default is False",
             action="store_true",
         )
 

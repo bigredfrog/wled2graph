@@ -2,6 +2,12 @@
 
 wled2graph is a Python program designed to visualize Frames Per Second (FPS) data and other from WLED endpoints on a network in real-time using a Bokeh graph server. It sets up a polling loop, defaulting to every 5 seconds, to fetch the current JSON state from each specified WLED endpoint
 
+Note that the Bokeh server is hosted on port 5006 by default. You can access the graph by navigating to http://localhost:5006 in your web browser.
+
+The browser window should be spawned on wled2graph launch, however, wled2graph is not closed on closure of the browser.
+
+You can navigate again to the same URL to re-open the graph, as long as the application is left running.
+
 ![wled2graph screenshot](https://raw.githubusercontent.com/bigredfrog/wled2graph/master/wled2graph.png)
 
 ## Features
@@ -19,7 +25,7 @@ wled2graph is a Python program designed to visualize Frames Per Second (FPS) dat
 pip install wled2graph
 ```
 
-WLED2Graph is executed from the command line and requires a list of IP addresses corresponding to the WLED endpoints you wish to monitor.
+wled2graph is executed from the command line and requires a list of IP addresses corresponding to the WLED endpoints you wish to monitor.
 
 ```bash
 wled2graph -w <WLED_IPs> [-t <time_period>] [-r <rollover>]
@@ -27,7 +33,8 @@ wled2graph -w <WLED_IPs> [-t <time_period>] [-r <rollover>]
 
 -w, --wleds: A comma-separated list of IP addresses for the WLED endpoints.  
 -t, --time-period: (Optional) The time period in seconds for polling the WLEDs. Default is 5 seconds.  
--r, --rollover: (Optional) The number of data points to keep in the graph before rolling over. Default is 20000.  
+-r, --rollover: (Optional) The number of data points to keep in the graph before rolling over. Default is 20000.
+-m, --remote: allow remote access to server on port 5006, default is False
 
 ### Example
 To start monitoring two WLED endpoints with a polling interval of 10 seconds:
@@ -43,6 +50,9 @@ wled2graph -w "192.168.1.216, 192.168.1.217, 192.168.1.220, 192.168.1.229, 192.1
 ```
 
 # How to develop on wled2graph
+
+Source code is hosted at https://github.com/bigredfrog/wled2graph
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
@@ -67,7 +77,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Development Usage
 
-WLED2Graph is executed from the command line and requires a list of IP addresses corresponding to the WLED endpoints you wish to monitor.
+wled2graph is executed from the command line and requires a list of IP addresses corresponding to the WLED endpoints you wish to monitor.
 
 ```bash
 poetry run python main.py -w <WLED_IPs> [-t <time_period>] [-r <rollover>]

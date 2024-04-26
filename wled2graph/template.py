@@ -35,9 +35,9 @@ css_table = """
     }
     .my-table th, .my-table td {
         border: 1px solid #fff;
-        padding: 12px;
+        padding: 8px;
         color: #fff;
-        font-size: 20px;
+        font-size: 16px;
     }
     .my-table th {
         background-color: #555;

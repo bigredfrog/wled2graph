@@ -76,4 +76,5 @@ def get_name(args, ip):
         except requests.exceptions.RequestException as e:
             _LOGGER.error(f"error getting name for {ip} : {e}")
             name = None
+            count = None
     return name, count
