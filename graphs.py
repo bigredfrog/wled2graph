@@ -142,7 +142,7 @@ def make_document(doc, args):
             <div style="color: white;">key  : $name</div>
             <div style="color: white;">fps  : @fps</div>
             <div style="color: white;">rssi : @rssi</div>
-            <div style="color: white;">png  : @p ms</div>
+            <div style="color: white;">ping : @p</div>
             <div style="color: white;">bssid: @bssid</div>
         </div>
     """
