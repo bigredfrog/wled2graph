@@ -33,8 +33,8 @@ wled2graph -w <WLED_IPs> [-t <time_period>] [-r <rollover>]
 
 -w, --wleds: A comma-separated list of IP addresses for the WLED endpoints.  
 -t, --time-period: (Optional) The time period in seconds for polling the WLEDs. Default is 5 seconds.  
--r, --rollover: (Optional) The number of data points to keep in the graph before rolling over. Default is 20000.
--m, --remote: allow remote access to server on port 5006, default is False
+-r, --rollover: (Optional) The number of data points to keep in the graph before rolling over. Default is 20000.  
+-m, --remote: allow remote access to server on port 5006, default is False  
 
 ### Example
 To start monitoring two WLED endpoints with a polling interval of 10 seconds:
