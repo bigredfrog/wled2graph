@@ -99,6 +99,32 @@ To start monitoring five WLED endpoints with a polling interval of 1 seconds and
 ```bash
 poetry run python main.py -w "192.168.1.216, 192.168.1.217, 192.168.1.220, 192.168.1.229, 192.168.1.230" -t 1 -r 30
 ```
+
+## VSCode support
+
+wled2graph incluses a .vscode/launch.json
+
+### Verify the virtual environment python interpreter path
+
+After running poetry install, verify the path to the virtual environment via
+
+```bash
+poetry env info --path
+```
+
+### Set the Python Interpreter for the project in VSCode
+
+Press Ctrl + Shift + P (or Cmd + Shift + P on macOS) and select "Python: Select Interpreter".
+Browse to the virtual environment path from the previous step and select the python executable inside it.
+
+### Edit the "args" options in launch.json
+
+add your IP address of interest or other launch options
+
+### Launch from the debugpy Run and Debug drop down
+
+wled2graph should run in the virtual environment against your selected args
+
 ## Contributing
 I just don't know if this has legs right now...
 
