@@ -19,7 +19,8 @@ def get_param(args, ip, paths):
     else:
         url = f"http://{ip}/json/info"
         response = requests.get(url)
-        response.raise_for_status()
+        # only uncomment this line for development debug
+        # response.raise_for_status()
         json_data = response.json()
         for path in paths:
             # Navigate through the JSON structure using each key in the path
