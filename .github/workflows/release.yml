@@ -1,0 +1,37 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - "v*"  # Trigger on tags like v1.0.0, v2.1.0, etc.
+
+jobs:
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+          poetry config virtualenvs.create false  # Optional: Use the system environment
+
+      - name: Install dependencies
+        run: poetry install --only main
+
+      - name: Build the package
+        run: poetry build
+
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry publish --username __token__ --password ${{ secrets.PYPI_API_TOKEN }}
