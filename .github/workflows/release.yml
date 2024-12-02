@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"  # Trigger on tags like v1.0.0, v2.1.0, etc.
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   publish:
@@ -29,7 +30,13 @@ jobs:
       - name: Build the package
         run: uv build
 
+      - name: Wait for approval
+        uses: peter-evans/wait-for-approval@v3
+        with:
+          approvers: bigredfrog  # Specify the user who needs to approve
+
       - name: Publish to PyPI
+        if: ${{ github.event_name == 'workflow_dispatch' }}  # Ensure this step runs only on manual trigger
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
