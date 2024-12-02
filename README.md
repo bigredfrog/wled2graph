@@ -58,7 +58,11 @@ Source code is hosted at https://github.com/bigredfrog/wled2graph
 Before you begin, ensure you have met the following requirements:
 
 - Python 3.9 or higher
-- [Poetry](https://python-poetry.org/docs/#installation), a tool for dependency management in Python projects.
+- uv package management is present, which can be installed with
+
+    ```bash
+    pip install uv
+    ```
 
 1. Clone the repository to your local machine:
 
@@ -67,10 +71,10 @@ Before you begin, ensure you have met the following requirements:
     cd wled2graph
     ```
 
-2. Install the project dependencies using Poetry:
+2. Install the project dependencies and test launch in a venv using uv:
 
     ```bash
-    poetry install
+    uv run wled2graph
     ```
 
     This will create a virtual environment and install the necessary Python libraries.
@@ -80,7 +84,7 @@ Before you begin, ensure you have met the following requirements:
 wled2graph is executed from the command line and requires a list of IP addresses corresponding to the WLED endpoints you wish to monitor.
 
 ```bash
-poetry run python main.py -w <WLED_IPs> [-t <time_period>] [-r <rollover>]
+uv run wled2graph -w <WLED_IPs> [-t <time_period>] [-r <rollover>]
 ```
 
 -w, --wleds: A comma-separated list of IP addresses for the WLED endpoints.  
@@ -91,31 +95,23 @@ poetry run python main.py -w <WLED_IPs> [-t <time_period>] [-r <rollover>]
 To start monitoring two WLED endpoints with a polling interval of 10 seconds:
 
 ```bash
-poetry run python main.py -w 192.168.1.100,192.168.1.101 -t 10
+uv run wled2graph -w 192.168.1.100,192.168.1.101 -t 10
 ```
 
 To start monitoring five WLED endpoints with a polling interval of 1 seconds and a data point rollover of 30:
 
 ```bash
-poetry run python main.py -w "192.168.1.216, 192.168.1.217, 192.168.1.220, 192.168.1.229, 192.168.1.230" -t 1 -r 30
+uv run wled2graph -w "192.168.1.216, 192.168.1.217, 192.168.1.220, 192.168.1.229, 192.168.1.230" -t 1 -r 30
 ```
 
 ## VSCode support
 
 wled2graph incluses a .vscode/launch.json
 
-### Verify the virtual environment python interpreter path
-
-After running poetry install, verify the path to the virtual environment via
-
-```bash
-poetry env info --path
-```
-
 ### Set the Python Interpreter for the project in VSCode
 
 Press Ctrl + Shift + P (or Cmd + Shift + P on macOS) and select "Python: Select Interpreter".
-Browse to the virtual environment path from the previous step and select the python executable inside it.
+Browse to the virtual environment path from the uv created venv and select the python executable inside it.
 
 ### Edit the "args" options in launch.json
 
