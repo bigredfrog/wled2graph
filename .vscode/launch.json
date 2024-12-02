@@ -5,7 +5,7 @@
             "name": "wled2graph",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/wled2graph/main.py",
+            "program": "${workspaceFolder}//wled2graph//main.py",
             "args":["-w 192.168.1.248"],
             "console": "integratedTerminal",
             "env": {
