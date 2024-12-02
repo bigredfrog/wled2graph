@@ -3,6 +3,8 @@ from logging.handlers import RotatingFileHandler
 
 
 def setup_logging(loglevel):
+    global _LOGGER  # noqa: PLW0603
+
     console_loglevel = loglevel or logging.WARNING
     console_logformat = "[%(levelname)-8s] %(name)-30s : %(message)s"
 
@@ -24,12 +26,8 @@ def setup_logging(loglevel):
 
     console_handler = logging.StreamHandler()
     console_handler.setLevel(console_loglevel)  # set loglevel
-    console_formatter = logging.Formatter(
-        console_logformat
-    )  # a simple console format
-    console_handler.setFormatter(
-        console_formatter
-    )  # tell the console_handler to use this format
+    console_formatter = logging.Formatter(console_logformat)  # a simple console format
+    console_handler.setFormatter(console_formatter)  # tell the console_handler to use this format
 
     # add the handlers to the root logger
     root_logger.setLevel(logging.DEBUG)
@@ -41,7 +39,4 @@ def setup_logging(loglevel):
     logging.getLogger("aiohttp.access").setLevel(logging.WARNING)
     logging.getLogger("zeroconf").setLevel(logging.WARNING)
 
-    global _LOGGER
     _LOGGER = logging.getLogger(__name__)
-
-

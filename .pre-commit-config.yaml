@@ -6,11 +6,16 @@ default_language_version:
 
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  # Ruff version.
-  rev: v0.8.0
+  rev: v0.8.0  # Ensure this matches the version you're using
   hooks:
-    # Run the linter, isort and fix issues
     - id: ruff
-      args: [ "--select", "I", "--fix" ]
-    # Run the formatter.
+      args:
+        - "--select"
+        - "E,F,W,A,PLC,PLE,PLW,I"
+        - "--fix"  # Optional, to auto-fix issues where possible
+        - "--line-length"
+        - "120"  # Set the line length to 120
     - id: ruff-format
+      args:
+        - "--line-length"
+        - "120"  # Ensure the formatter also uses the same line length

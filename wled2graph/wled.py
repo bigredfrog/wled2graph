@@ -1,14 +1,16 @@
-import numpy as np
-import requests
 import logging
 import random
+
 import icmplib
+import numpy as np
+import requests
 
 _LOGGER = logging.getLogger(__name__)
 
 offline = True
 
 # 192.168.1.227, 192.168.1.228,
+
 
 def get_param(args, ip, paths):
     result = []
@@ -33,7 +35,7 @@ def get_param(args, ip, paths):
                     break
             else:
                 result.append(value)
-#    _LOGGER.info(f"response is {json.dumps(response.json(), indent=4)}")
+    #    _LOGGER.info(f"response is {json.dumps(response.json(), indent=4)}")
     return result
 
 
@@ -59,9 +61,7 @@ def get_ping(args, ip):
     return result
 
 
-
 def get_name(args, ip):
-
     if args.args.offline:
         name = f"WLED{random.randint(1, 100)}"
         count = random.randint(101, 256)
@@ -71,7 +71,7 @@ def get_name(args, ip):
             response = requests.get(url)
             response.raise_for_status()
             resp_json = response.json()
-    #    _LOGGER.info(f"response is {json.dumps(resp_json, indent=4)}")
+            #    _LOGGER.info(f"response is {json.dumps(resp_json, indent=4)}")
             name = f"{resp_json['name']}"
             count = f"{resp_json['leds']['count']}"
         except requests.exceptions.RequestException as e:

@@ -1,12 +1,13 @@
-import logging
 import argparse
 import ipaddress
+import logging
 
 _LOGGER = logging.getLogger(__name__)
 
+
 def process_ip_list(ip_list_str):
     # Split the string into individual IP addresses
-    ip_list = ip_list_str.split(',')
+    ip_list = ip_list_str.split(",")
 
     # Check if there is at least one IP address
     if not ip_list:
@@ -16,8 +17,7 @@ def process_ip_list(ip_list_str):
     ip_objects = []
     for ip_str in ip_list:
         try:
-            ip_objects.append(ipaddress.IPv4Address(
-                ip_str.strip()))  # Create ipaddress object
+            ip_objects.append(ipaddress.IPv4Address(ip_str.strip()))  # Create ipaddress object
         except ipaddress.AddressValueError:
             raise argparse.ArgumentTypeError(f"Invalid IP address: {ip_str}")
 
@@ -28,9 +28,9 @@ def process_ip_list(ip_list_str):
 
 def process_fields(input_string):
     # Split the string by commas
-    tokens = input_string.split(',')
+    tokens = input_string.split(",")
     # Replace spaces with underscores in each token
-    processed_tokens = [token.strip().replace(' ', '_') for token in tokens]
+    processed_tokens = [token.strip().replace(" ", "_") for token in tokens]
     return processed_tokens
 
 
@@ -47,9 +47,7 @@ class Args:
         _LOGGER.info(f"ips are {self.ip_list}")
 
     def parse_args(self):
-        parser = argparse.ArgumentParser(
-            description="A Networked LED Effect Controller"
-        )
+        parser = argparse.ArgumentParser(description="A Networked LED Effect Controller")
 
         parser.add_argument(
             "-w",
