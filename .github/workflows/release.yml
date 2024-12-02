@@ -30,10 +30,11 @@ jobs:
       - name: Build the package
         run: uv build
 
-      - name: Wait for approval
-        uses: peter-evans/wait-for-approval@v3
-        with:
-          approvers: bigredfrog  # Specify the user who needs to approve
+      - name: Manual approval
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "Waiting for approval..."
+          echo "::pause::"  # Pause the workflow for manual approval
 
       - name: Publish to PyPI
         if: ${{ github.event_name == 'workflow_dispatch' }}  # Ensure this step runs only on manual trigger
