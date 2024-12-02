@@ -1,20 +1,25 @@
-[tool.poetry]
+[tool.pdm.build]
+includes = []
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    {name = "bigredfrog", email = "big.red.frog@gmail.com"},
+]
+license = {text = "MIT"}
+requires-python = "<4.0,>=3.9"
+dependencies = [
+    "bokeh<4.0.0,>=3.3.4",
+    "requests<3.0.0,>=2.31.0",
+    "icmplib<4.0.0,>=3.0.4",
+]
 name = "wled2graph"
 version = "0.1.4"
 description = "wled2graph supports a table and graphs of FPS and other data from multiple WLED endpoints in real-time via a browser interface"
-authors = ["bigredfrog <big.red.frog@gmail.com>"]
 readme = "README.md"
-license = "MIT"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-bokeh = "^3.3.4"
-requests = "^2.31.0"
-icmplib = "^3.0.4"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-wled2graph = 'wled2graph.main:main'
+[project.scripts]
+wled2graph = "wled2graph.main:main"
