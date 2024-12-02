@@ -17,21 +17,20 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
-      - name: Install Poetry
+      - name: Install UV
         run: |
-          pip install poetry
-          poetry config virtualenvs.create false  # Optional: Use the system environment
+          pip install uv
 
       - name: Install dependencies
-        run: poetry install --only main
+        run: uv install
 
       - name: Build the package
-        run: poetry build
+        run: uv build
 
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: poetry publish --username __token__ --password ${{ secrets.PYPI_API_TOKEN }}
+        run: uv publish --username __token__ --password ${{ secrets.PYPI_API_TOKEN }}
