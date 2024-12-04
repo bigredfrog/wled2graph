@@ -8,10 +8,13 @@
 
 # this is a test
 
-import logging
-
 from wled2graph import graphs, utils
 from wled2graph.args import Args
+
+import logging
+
+
+
 
 args = Args()
 
