@@ -10,7 +10,7 @@ authors = [
     {name = "bigredfrog", email = "big.red.frog@gmail.com"},
 ]
 license = {text = "MIT"}
-requires-python = ">=3.9,<4.0"
+requires-python = ">=3.12,<4.0"
 dependencies = [
     "requests~=2.0",
     "icmplib~=3.0",
