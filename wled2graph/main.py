@@ -13,6 +13,8 @@ from wled2graph.args import Args
 
 args = Args()
 _LOGGER = logging.getLogger(__name__)
+
+
 def main():
     utils.setup_logging(logging.INFO)
 
