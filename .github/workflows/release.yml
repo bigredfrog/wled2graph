@@ -34,18 +34,6 @@ jobs:
       - name: Build the package
         run: uv build
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-artifact
-          path: dist/  # Adjust the path if necessary
-
-      - name: Manual approval
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: |
-          echo "Waiting for approval..."
-          echo "::pause::"  # Pause the workflow for manual approval
-
   publish:
     name: Publish to PyPI
     needs: pre-publish
@@ -56,16 +44,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download build artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: dist-artifact
-
       - name: Install uv
         uses: astral-sh/setup-uv@v4
 
-      - name: Set up Python 3.12
-        run: uv python install 3.12
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install  ${{ matrix.python-version }}
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
+
+      - name: Build the package
+        run: uv build
 
       - name: Publish to PyPI
         if: ${{ github.event_name == 'workflow_dispatch' }}  # Ensure this step runs only on manual trigger
