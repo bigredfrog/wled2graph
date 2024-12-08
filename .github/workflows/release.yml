@@ -7,7 +7,7 @@ on:
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
-  publish:
+  pre-publish:
     name: Prepare to Publish
     runs-on: ubuntu-latest
 
@@ -40,6 +40,12 @@ jobs:
           echo "Waiting for approval..."
           echo "::pause::"  # Pause the workflow for manual approval
 
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    environment: release
+    
+    steps:
       - name: Publish to PyPI
         if: ${{ github.event_name == 'workflow_dispatch' }}  # Ensure this step runs only on manual trigger
         env:
