@@ -121,6 +121,21 @@ add your IP address of interest or other launch options
 
 wled2graph should run in the virtual environment against your selected args
 
+## Release Tagging
+
+Tagging is restricted to users with write permissions only
+
+Pushing a release tag will trigger a release action with an approval step for publish
+
+Useful commands
+
+```bash
+git tag v0.1.5
+git tag -d v0.1.5
+git push origin v0.1.5
+git push origin --delete v0.1.5
+```
+
 ## Contributing
 I just don't know if this has legs right now...
 
