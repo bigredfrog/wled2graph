@@ -33,7 +33,13 @@ jobs:
 
       - name: Build the package
         run: uv build
-      
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-artifact
+          path: dist/  # Adjust the path if necessary
+
       - name: Manual approval
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
@@ -42,10 +48,19 @@ jobs:
 
   publish:
     name: Publish to PyPI
+    needs: pre-publish
     runs-on: ubuntu-latest
     environment: release
-    
+
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-artifact
+
       - name: Publish to PyPI
         if: ${{ github.event_name == 'workflow_dispatch' }}  # Ensure this step runs only on manual trigger
         env:
