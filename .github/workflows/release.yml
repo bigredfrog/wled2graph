@@ -34,15 +34,13 @@ jobs:
       - name: Build the package
         run: uv build
 
-      - name: Cache build artifacts
-        uses: actions/cache@v3
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
         with:
+          name: build-artifacts
           path: |
             dist
             build
-          key: ${{ runner.os }}-build-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
 
   publish:
     name: Publish to PyPI
@@ -51,15 +49,10 @@ jobs:
     environment: release
 
     steps:
-      - name: Restore build artifacts
-        uses: actions/cache@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
         with:
-          path: |
-            dist
-            build
-          key: ${{ runner.os }}-build-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
+          name: build-artifacts
 
       - name: Install uv
         uses: astral-sh/setup-uv@v4    
