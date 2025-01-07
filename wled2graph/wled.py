@@ -20,21 +20,26 @@ def get_param(args, ip, paths):
             result.append(random.randint(10, 64))
     else:
         url = f"http://{ip}/json/info"
-        response = requests.get(url)
-        # only uncomment this line for development debug
-        # response.raise_for_status()
-        json_data = response.json()
-        for path in paths:
-            # Navigate through the JSON structure using each key in the path
-            value = json_data
-            for key in path:
-                value = value.get(key)
-                if value is None:
-                    # If any intermediate key is missing, break and append None
-                    result.append(None)
-                    break
-            else:
-                result.append(value)
+        try:
+            response = requests.get(url)
+            # only uncomment this line for development debug
+            # response.raise_for_status()
+            json_data = response.json()
+            for path in paths:
+                # Navigate through the JSON structure using each key in the path
+                value = json_data
+                for key in path:
+                    value = value.get(key)
+                    if value is None:
+                        # If any intermediate key is missing, break and append None
+                        result.append(None)
+                        break
+                else:
+                    result.append(value)
+        except requests.exceptions.RequestException as e:
+            _LOGGER.error(f"error getting param for {ip} : {e}")
+            result = None
+
     #    _LOGGER.info(f"response is {json.dumps(response.json(), indent=4)}")
     return result
 
