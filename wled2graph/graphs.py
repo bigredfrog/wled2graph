@@ -7,7 +7,6 @@ from datetime import datetime
 from functools import partial
 from threading import Lock, Thread
 
-import numpy as np
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.layouts import column
@@ -58,12 +57,12 @@ def data_capture(args, start_time):
                     if values:
                         for idx, value in enumerate(values):
                             if value is None:
-                                data_source[str(ip)][fields[idx]].append(np.nan)
+                                data_source[str(ip)][fields[idx]].append(float('nan'))
                                 continue
                             data_source[str(ip)][fields[idx]].append(value)
                     else:
                         for idx, path in enumerate(paths):
-                            data_source[str(ip)][fields[idx]].append(np.nan)
+                            data_source[str(ip)][fields[idx]].append(float('nan'))
                     # get ping for ip
                     new_ping = wled.get_ping(args, ip)
                     data_source[str(ip)]["p"].append(new_ping)

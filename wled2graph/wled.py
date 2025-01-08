@@ -2,7 +2,6 @@ import logging
 import random
 
 import icmplib
-import numpy as np
 import requests
 
 _LOGGER = logging.getLogger(__name__)
@@ -16,8 +15,11 @@ def get_param(args, ip, paths):
     result = []
     if args.args.offline:
         # generate a random number between 10 and 64
-        for path in paths:
-            result.append(random.randint(10, 64))
+        if random.random() < 0.1:
+            result = None
+        else:
+            for path in paths:
+                result.append(random.randint(10, 64))
     else:
         url = f"http://{ip}/json/info"
         try:
@@ -60,7 +62,7 @@ def get_ping(args, ip):
     )
 
     if ping.packets_received == 0:
-        result = np.nan
+        result = float('nan')
     else:
         result = ping.avg_rtt
     return result
