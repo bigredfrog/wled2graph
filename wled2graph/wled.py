@@ -62,7 +62,7 @@ def get_ping(args, ip):
     )
 
     if ping.packets_received == 0:
-        result = float('nan')
+        result = float("nan")
     else:
         result = ping.avg_rtt
     return result
