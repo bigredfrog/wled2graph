@@ -6,7 +6,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}//wled2graph//main.py",
-            "args":["-w 192.168.1.248"],
+            "args":["-w 192.168.1.236, 192.168.1.249"],
             "console": "integratedTerminal",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
