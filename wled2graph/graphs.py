@@ -233,7 +233,7 @@ def make_document(doc, args):
                 cl = Category10[10][idx % 10]
                 td_style = f"<td style='color: {cl};'>"
                 if data_source[ip]["name"] is None:
-                    new_table_html += f"<tr>{td_style}{ip}</td><td>Not Found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>"
+                    new_table_html += f"<tr>{td_style}{ip}</td><td>Not Found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>" # noqa: E501
                 else:
                     new_table_html += (
                         f"<tr>{td_style}<a href='http://{ip}' target='_blank' style='color: inherit;'>{ip}</td>"
