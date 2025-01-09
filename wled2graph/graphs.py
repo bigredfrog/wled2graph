@@ -37,9 +37,17 @@ def get_names(args):
     with data_lock:
         for ip in args.ip_list:
             _LOGGER.info(f"getting name for {ip}")
-            name, count = wled.get_name(args, ip)
+            name, count, ver, vid, arch = wled.get_name(args, ip)
             _LOGGER.info(f"name : LED count = {name} : {count}")
-            data_source[str(ip)] = {"name": name, "count": count, "x": [], "p": []}
+            data_source[str(ip)] = {
+                "name": name,
+                "count": count,
+                "ver": ver,
+                "vid": vid,
+                "arch": arch,
+                "x": [],
+                "p": [],
+            }
             for field in fields:
                 data_source[str(ip)][field] = []
 
@@ -197,7 +205,7 @@ def make_document(doc, args):
             new_table_html = "<table class='my-table'>"
             new_table_html += (
                 "<tr><th>IP</th><th>Name</th><th>  Leds  </th><th>   FPS   </th>"
-                "<th>BSSID</th><th>  RSSI  </th><th>Ping(ms)</th></tr>"
+                "<th>BSSID</th><th>  RSSI  </th><th>Ping(ms)</th><th>Version</th><th>Board</th></tr>"
             )
 
             for idx, ip in enumerate(data_source.keys()):
@@ -225,9 +233,7 @@ def make_document(doc, args):
                 cl = Category10[10][idx % 10]
                 td_style = f"<td style='color: {cl};'>"
                 if data_source[ip]["name"] is None:
-                    new_table_html += (
-                        f"<tr>{td_style}{ip}</td><td>Not Found</td><td></td><td></td><td></td><td></td><td></td></tr>"
-                    )
+                    new_table_html += f"<tr>{td_style}{ip}</td><td>Not Found</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>"  # noqa: E501
                 else:
                     new_table_html += (
                         f"<tr>{td_style}<a href='http://{ip}' target='_blank' style='color: inherit;'>{ip}</td>"
@@ -236,7 +242,9 @@ def make_document(doc, args):
                         + f"<td>{data_source[ip]['fps'][-1]}</td>"
                         + f"<td>{data_source[ip]['bssid'][-1]}</td>"
                         + f"<td>{data_source[ip]['rssi'][-1]}</td>"
-                        + f"<td>{data_source[ip]['p'][-1]:.0f}</td></tr>"
+                        + f"<td>{data_source[ip]['p'][-1]:.0f}</td>"
+                        + f"<td>{data_source[ip]['ver']} - {data_source[ip]['vid']}</td>"
+                        + f"<td>{data_source[ip]['arch']}</td></tr>"
                     )
 
             new_table_html += "</table>"

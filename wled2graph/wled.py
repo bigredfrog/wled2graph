@@ -72,6 +72,9 @@ def get_name(args, ip):
     if args.args.offline:
         name = f"WLED{random.randint(1, 100)}"
         count = random.randint(101, 256)
+        ver = "0.0.0"
+        vid = 1000000
+        arch = "unknown"
     else:
         url = f"http://{ip}/json/info"
         try:
@@ -81,8 +84,14 @@ def get_name(args, ip):
             #    _LOGGER.info(f"response is {json.dumps(resp_json, indent=4)}")
             name = f"{resp_json['name']}"
             count = f"{resp_json['leds']['count']}"
+            ver = resp_json["ver"]
+            vid = resp_json["vid"]
+            arch = resp_json["arch"]
         except requests.exceptions.RequestException as e:
             _LOGGER.error(f"error getting name for {ip} : {e}")
             name = None
             count = None
-    return name, count
+            ver = None
+            vid = None
+            arch = None
+    return name, count, ver, vid, arch
