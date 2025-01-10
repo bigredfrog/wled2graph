@@ -11,6 +11,29 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
             }
+        },
+        {
+            "name": "wled2graph offline",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}//wled2graph//main.py",
+            "args":["-w 192.168.1.236, 192.168.1.249", "--offline","-t 1"],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "wled2graph no WLED",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}//wled2graph//main.py",
+            "args":["-w 8.8.8.8", "--no-wled","-t 1"],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+
         }
     ]
 }

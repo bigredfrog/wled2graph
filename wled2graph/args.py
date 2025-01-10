@@ -85,6 +85,14 @@ class Args:
         )
 
         parser.add_argument(
+            "-n",
+            "--no-wled",
+            dest="no_wled",
+            help="Only runs ping test to endpoints, default is False",
+            action="store_true",
+        )
+
+        parser.add_argument(
             "-m",
             "--remote",
             dest="remote",
