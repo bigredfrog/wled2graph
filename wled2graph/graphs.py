@@ -257,7 +257,11 @@ def make_document(doc, args):
     doc.add_periodic_callback(update, args.args.period * 1000)
     doc.template = css_template
     doc.title = "wled2graph"
-    doc.add_root(column(div_head, div_lines, plot_params, plot_ping, plot_rssi, sizing_mode="stretch_width"))
+
+    if args.args.no_wled:
+        doc.add_root(column(div_head, div_lines, plot_ping, sizing_mode="stretch_width"))
+    else:
+        doc.add_root(column(div_head, div_lines, plot_params, plot_ping, plot_rssi, sizing_mode="stretch_width"))
 
 
 def run_bokeh_app(args):
