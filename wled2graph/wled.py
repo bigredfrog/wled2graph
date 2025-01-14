@@ -63,9 +63,10 @@ def get_ping(args, ip):
             count=1,
             privileged=False,
             interval=0.1,
-            timeout=0.500,
+            timeout=1.0,
         )
 
+        # _LOGGER.error(f"{ping}\n{ping.is_alive}")
         if ping.packets_received == 0:
             result = float("nan")
         else:

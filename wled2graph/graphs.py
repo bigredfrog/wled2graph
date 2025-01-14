@@ -10,7 +10,7 @@ from threading import Lock, Thread
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.layouts import column
-from bokeh.models import ColumnDataSource, Div, HoverTool, PanTool, WheelZoomTool
+from bokeh.models import ColumnDataSource, Div, HoverTool, PanTool, WheelZoomTool, FullscreenTool
 from bokeh.palettes import Category10
 from bokeh.plotting import figure
 from bokeh.server.server import Server
@@ -92,7 +92,7 @@ def make_document(doc, args):
     source_dict = {}
     # TODO: create graphs data driven from fields
     size_mode = "stretch_width"
-    graph_height = 350
+    graph_height = 400
 
     plot_params = figure(
         title="Real-time update for fps",
@@ -181,6 +181,10 @@ def make_document(doc, args):
     plot_ping.toolbar.active_drag = x_pan
     plot_rssi.add_tools(x_pan)
     plot_rssi.toolbar.active_drag = x_pan
+
+    plot_params.add_tools(FullscreenTool())
+    plot_ping.add_tools(FullscreenTool())
+    plot_rssi.add_tools(FullscreenTool())
 
     doc.theme = "dark_minimal"
 

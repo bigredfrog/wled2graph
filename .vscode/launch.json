@@ -28,7 +28,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}//wled2graph//main.py",
-            "args":["-w 8.8.8.8", "--no-wled","-t 1"],
+            "args":["-w 10.27.15.132", "--no-wled","-t 2", "-r 120"],
             "console": "integratedTerminal",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
