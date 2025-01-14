@@ -17,7 +17,7 @@ dependencies = [
     "bokeh~=3.0",
 ]
 name = "wled2graph"
-version = "0.1.7"
+version = "0.1.8"
 description = "wled2graph supports a table and graphs of FPS and other data from multiple WLED endpoints in real-time via a browser interface"
 readme = "README.md"
 
