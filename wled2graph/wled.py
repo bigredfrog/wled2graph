@@ -20,6 +20,8 @@ def get_param(args, ip, paths):
         else:
             for path in paths:
                 result.append(random.randint(10, 64))
+    elif args.args.no_wled:
+        result = None
     else:
         url = f"http://{ip}/json/info"
         try:
@@ -53,18 +55,23 @@ def get_ping(args, ip):
     # break in the graph om bokeh
     ###
 
-    ping = icmplib.ping(
-        address=str(ip),
-        count=1,
-        privileged=False,
-        interval=0.1,
-        timeout=0.500,
-    )
-
-    if ping.packets_received == 0:
-        result = float("nan")
+    if args.args.offline:
+        result = random.randint(10, 100)
     else:
-        result = ping.avg_rtt
+        ping = icmplib.ping(
+            address=str(ip),
+            count=1,
+            privileged=False,
+            interval=0.1,
+            timeout=1.0,
+        )
+
+        # _LOGGER.error(f"{ping}\n{ping.is_alive}")
+        if ping.packets_received == 0:
+            result = float("nan")
+        else:
+            result = ping.avg_rtt
+
     return result
 
 
@@ -75,6 +82,14 @@ def get_name(args, ip):
         ver = "0.0.0"
         vid = 1000000
         arch = "unknown"
+    elif args.args.no_wled:
+        if not hasattr(get_name, "counter"):
+            get_name.counter = 1  # Initialize the counter attribute
+        name = f"source {get_name.counter}"
+        count = 0
+        ver = "0.0.0"
+        vid = 0
+        arch = "NA"
     else:
         url = f"http://{ip}/json/info"
         try:
