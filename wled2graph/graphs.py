@@ -10,7 +10,7 @@ from threading import Lock, Thread
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.layouts import column
-from bokeh.models import ColumnDataSource, Div, HoverTool, PanTool, WheelZoomTool, FullscreenTool
+from bokeh.models import ColumnDataSource, Div, FullscreenTool, HoverTool, PanTool, WheelZoomTool
 from bokeh.palettes import Category10
 from bokeh.plotting import figure
 from bokeh.server.server import Server
