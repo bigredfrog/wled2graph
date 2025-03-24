@@ -6,7 +6,7 @@ default_language_version:
 
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.8.6  # Ensure this matches the version you're using
+  rev: v0.11.2  # Ensure this matches the version you're using
   hooks:
     - id: ruff
       args:
